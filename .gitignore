@@ -1,0 +1,8 @@
+﻿ytleadgen_config.json
+*.csv
+*.exe
+chromedriver.exe
+build/
+dist/
+__pycache__/
+*.pyc
