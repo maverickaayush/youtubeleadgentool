@@ -1,3 +1,4 @@
+<img width="1127" height="972" alt="image" src="https://github.com/user-attachments/assets/e4ac7889-40f3-45af-a6f4-72bf4774b382" />
 # youtubeleadgentool
 A YouTube lead generation tool built using the official YouTube Data API v3 and browser automation. It discovers relevant channels via keywords, fetches channel metadata, and extracts publicly available business emails from About pages, exporting clean CSVs for outreach.
 
