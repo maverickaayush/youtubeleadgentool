@@ -1,77 +1,178 @@
 <img width="1127" height="972" alt="image" src="https://github.com/user-attachments/assets/e4ac7889-40f3-45af-a6f4-72bf4774b382" />
-# youtubeleadgentool
-A YouTube lead generation tool built using the official YouTube Data API v3 and browser automation. It discovers relevant channels via keywords, fetches channel metadata, and extracts publicly available business emails from About pages, exporting clean CSVs for outreach.
+# YouTube LeadGen Tool
 
-Features
+A desktop application for discovering relevant YouTube channels and extracting publicly listed business contact emails into structured CSV output.
 
-Keyword-based YouTube channel discovery
+Built with **Python, YouTube Data API v3, Selenium, Tkinter, and CSV-based data processing**.
 
-Subscriber count, country, and metadata filtering
+## Overview
 
-Public business email extraction from About pages
+YouTube LeadGen Tool automates the repetitive parts of finding potentially relevant channels for business research.
 
-Test Mode (low-risk validation)
+The application:
 
-Full Mode (high-volume lead generation)
+1. Discovers channels using the YouTube Data API.
+2. Retrieves channel metadata and descriptions.
+3. Filters channels by configurable criteria.
+4. Visits publicly accessible YouTube About pages with Selenium.
+5. Extracts publicly listed business email addresses.
+6. Deduplicates and writes results incrementally to CSV.
 
-Clean CSV export for campaigns
+The project is designed for legitimate research and outreach workflows and only targets information that is publicly available.
 
-Tech Stack
+## Architecture
 
-YouTube Data API v3 (Google Console)
+```text
+                ┌─────────────────────┐
+                │     Tkinter GUI     │
+                └──────────┬──────────┘
+                           │
+                           ▼
+                ┌─────────────────────┐
+                │   Core Processing   │
+                │   ytleadgen_core.py │
+                └──────────┬──────────┘
+                           │
+             ┌─────────────┴─────────────┐
+             ▼                           ▼
+   ┌──────────────────┐        ┌──────────────────┐
+   │ YouTube Data API  │        │     Selenium     │
+   │ Channel discovery │        │ About-page data  │
+   └────────┬─────────┘        └────────┬─────────┘
+            │                           │
+            └────────────┬──────────────┘
+                         ▼
+                ┌─────────────────────┐
+                │ Filtering + Email   │
+                │ Extraction + Dedup  │
+                └──────────┬──────────┘
+                           ▼
+                    ┌─────────────┐
+                    │ CSV Output  │
+                    └─────────────┘
+```
 
-Selenium (browser automation)
+## Features
 
-Python backend
+### Channel Discovery
 
-CSV-based output
+Search for channels using configurable keywords through the YouTube Data API v3.
 
-How It Works
+### Metadata Filtering
 
-API Robot
+Filter discovered channels using criteria such as:
 
-Searches channels using YouTube Data API v3
+* Subscriber count
+* Country
+* Description keywords
+* Presence of publicly listed business contact information
 
-Fetches metadata and About page links
+### Public Email Extraction
 
-Browser Robot
+Selenium visits channel About pages and extracts email addresses that are publicly exposed by the channel.
 
-Opens verified browser session
+### Deduplication
 
-Navigates to About pages
+Duplicate channel IDs and duplicate email addresses are removed before export.
 
-Extracts publicly visible business emails
+### Incremental CSV Output
 
-Setup
+Results are written as they are processed rather than waiting for the entire scan to finish.
 
-Create a Google Cloud project
+### Desktop GUI
 
-Enable YouTube Data API v3
+The Tkinter interface provides:
 
-Generate an API key
+* API key configuration
+* Keyword configuration
+* Filtering controls
+* Test mode
+* Headless browser mode
+* Output directory selection
+* Progress reporting
+* Runtime logs
 
-Add the key to the project config
+## Project Structure
 
-Run in Test Mode before Full Mode
+```text
+.
+├── ytleadgen_core.py
+├── ytleadgen_gui.py
+├── requirements.txt
+├── BUILDING.md
+├── .gitignore
+└── README.md
+```
 
-Output
+## Requirements
 
-Channel ID
+* Python 3.9+
+* Google/YouTube Data API v3 key
+* Google Chrome
+* Selenium-compatible ChromeDriver environment
 
-Channel Name
+Install Python dependencies:
 
-Subscriber Count
+```bash
+pip install -r requirements.txt
+```
 
-Country
+## Configuration
 
-Extracted Email(s)
+Create a local `ytleadgen_config.json` file in the project directory.
 
-Use Cases
+Example:
 
-Influencer outreach
+```json
+{
+  "api_key": "YOUR_YOUTUBE_API_KEY",
+  "keywords": "ai,technology",
+  "min_subs": 0,
+  "max_subs": 1000000,
+  "bio_key": "",
+  "country": "",
+  "require_email": true,
+  "test_mode": true,
+  "headless": true,
+  "out_dir": "./output"
+}
+```
 
-Brand collaborations
+Do **not** commit your API key or other local credentials to GitHub.
 
-Agency lead generation
+## Running
 
-Market research
+Launch the graphical interface with:
+
+```bash
+python ytleadgen_gui.py
+```
+
+Configure the search criteria and start a scan from the GUI.
+
+For development and verification, enable **Test Mode** to keep scans small and easier to inspect.
+
+## Engineering Notes
+
+The application separates discovery, metadata processing, filtering, browser automation, extraction, and export into distinct functions rather than implementing the entire workflow in one script.
+
+Channel lookups are batched to reduce unnecessary API requests, while discovered channel IDs are deduplicated before metadata processing.
+
+CSV output is written incrementally so that completed results are preserved even if a later channel fails during processing.
+
+Selenium is used only where browser-rendered channel information is required, while the YouTube API handles structured channel discovery and metadata retrieval.
+
+## Responsible Use
+
+This project is intended for legitimate business research and outreach workflows.
+
+It only extracts contact information that channel owners have chosen to make publicly available. Users are responsible for complying with applicable laws, platform terms, API policies, privacy requirements, and anti-spam regulations.
+
+## Documentation
+
+See [BUILDING.md](BUILDING.md) for development and packaging instructions.
+
+## License
+
+See the repository license for usage and redistribution terms.
+
